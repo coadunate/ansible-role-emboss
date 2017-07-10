@@ -1,0 +1,28 @@
+---
+# tasks file for ansible-role-seqtk
+
+
+- name: Ensure software folder exists
+  file: path={{ ansible_env.PWD }}/software state=directory mode=0777
+
+- name: Get the tar file for EMBOSS installation 
+  get_url:
+      url: ftp://emboss.open-bio.org/pub/EMBOSS/emboss-latest.tar.gz
+      dest: "{{ ansible_env.PWD }}/software/"
+      force_basic_auth: yes
+
+
+- name: Unarchive the downloaded file
+  unarchive:
+      src: "{{ ansible_env.PWD }}/software/emboss-latest.tar.gz"
+      dest: "{{ ansible_env.PWD }}/software"
+      remote_src: true
+  notify:
+      - remove archived file
+
+- name: Run configure for EMBOSS installation
+  shell: "{{ ansible_env.PWD }}/software/EMBOSS-6.6.0/configure --without-x"
+
+- name: Run make for EMBOSS installation
+  shell "{{ ansible_env.PWD}}/software/EMBOSS-6.6.0/make"
+

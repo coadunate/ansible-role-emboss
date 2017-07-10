@@ -16,7 +16,8 @@ Role Variables
 Dependencies
 ------------
 
-- coadunate.{...}
+- coadunate.devtools
+- coadunate.epel
 
 Example Playbook
 ----------------
